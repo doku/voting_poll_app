@@ -1,0 +1,198 @@
+<div ng-include="'components/navbar/navbar.html'"></div>
+
+
+<div ng-controller="MainCtrl">
+  <div ng-show="page === 'default'">
+    <header id="banner" class="hero-unit">
+
+      {{ page }}sss
+    </header>
+
+  </div>
+
+  <div ng-hide="isLoggedIn()">
+    <sign-up>
+      <header id="banner" class="hero-unit">
+        <div class="container">
+          <h1>VotePlex</h1>
+          <p class="lead">Create custom polls with live results.</p>
+          <form class="ng-pristine ng-valid" action="/signup">
+            <button class="btn btn-success btn-lg" type="submit">Sign Up</button>
+          </form>
+        </div>
+      </header>
+    </sign-up>
+    <div ng-hide="page === 'votePoll'">
+      <div class="container marketing">
+        <div class="row">
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <i class="fa fa-bolt"></i>
+            <h2>Live Results</h2>
+            <p>Live graphs show your poll results immediately in easy to an easy to understand format. One graph will not provide the whole picture, that's why we provide multiple graph types to better describe your results.</p>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <i class="fa fa-globe"></i>
+            <h2>Works Everywhere</h2>
+            <p>Traditional desktop computers now represent only 30% of Internet traffic. Your poll must work on the tablets, smart phones, netbooks and notebooks that your visitors are using. Our responsive designs do just that.</p>
+          </div>
+          <div class="col-lg-4 col-md-4 col-sm-4">
+            <i class="fa fa-facebook"></i>
+            <h2>Social Integration</h2>
+            <p>Free integrated facebook or traditional comments allow your poll voters to provide immediate feedback and discuss results. Social share buttons encourage your poll voters to help spread the word.</p>
+          </div>
+        </div>
+      </div>
+      <footer class="footer">
+        <div class="container">
+          <p>
+            FreeCodeCamp Basejump |
+            <a href="https://twitter.com/GeoffStorbeck">@GeoffStorbeck</a>
+          </p>
+        </div>
+      </footer>
+    </div>
+  </div>
+  <div ng-show="isLoggedIn()">
+    <logged-in>
+      <header id="banner" class="hero-unit">
+        <div class="container">
+          <h1>Dashboard</h1>
+          <p class="lead">What would you like to do today?</p>
+          <button class="btn btn-primary btn-lg" ng-class="{ 'btn-success' : page === 'newPoll' }" ng-click="setPage('newPoll')">New Poll</button>
+          <button class="btn btn-primary btn-lg" ng-class="{ 'btn-success' : page === 'myPolls' }" ng-click="setPage('myPolls')">My Polls</button>
+          <button class="btn btn-primary btn-lg" ng-class="{ 'btn-success' : page === 'results' }" ng-click="setPage('results')">results</button>
+          <button class="btn btn-primary btn-lg" ng-class="{ 'btn-success' : page === 'votePoll' }" ng-click="setPage('votePoll')">Vote Poll</button>
+        </div>
+      </header>
+    </logged-in>
+    <div class="alert alert-danger" ng-show="pollExists&& !posted">
+      <div class="strong">Uh oh!</div>
+      <p>You already have a poll with this name!</p>
+    </div>
+
+
+    <new-poll ng-show="page === 'newPoll'">
+      <h3> poll form </h3>
+
+
+      <div id="newPollForm" class="container ng-scope" ng-controller="NewPollCtrl">
+
+        <h2>New Poll</h2>
+
+        <form class="ng-pristine ng-invalid ng-invalid-required" novalidate="" name="poll">
+          <div class="form-group">
+            <label for="name">Name your poll</label>
+            <input id="name" class="form-control ng-pristine ng-untouched ng-invalid ng-invalid-required" required="" placeholder="What is your favorite brand?" ng-model="pollName">
+          </div>
+          <div class="form-group">
+            <label>Options</label>
+
+
+            <input class="form-control ng-pristine ng-untouched ng-scope ng-invalid ng-invalid-required" required="" ng-repeat="n in placeholders track by $index" placeholder="{{n}}" ng-model="pollOptions[$index]">
+            <!-- <input class="form-control ng-pristine ng-untouched ng-scope ng-invalid ng-invalid-required" required="" ng-repeat="n in placeholders track by $index" placeholder="Coca-Cola" ng-model="pollOptions[$index]"> -->
+
+          </div>
+          <div class="form-buttons">
+            <button class="btn btn-default" ng-click="newOption()" type="button">More Options</button>
+            <button class="btn btn-success" ng-disabled="poll.$invalid" ng-click="submit()" type="submit" disabled="disabled">Submit</button>
+          </div>
+        </form>
+      </div>
+
+
+    </new-poll>
+
+    <new-poll-posted ng-show="page==='newPollPosted'">
+      <div id="newPollForm" class="container">
+        <h1>Congratulations!</h1>
+        <p class="lead">
+          Your poll has been posted to
+          <a class="ng-binding" href=""></a>
+        </p>
+      </div>
+    </new-poll-posted>
+    <my-polls ng-show="page === 'myPolls'">
+      <div class="container">
+        <div class="col-lg-4"></div>
+
+        <h3>myPolls</h3>
+        <form class="ng-pristine ng-valid">
+
+
+          <ul class="list-group">
+            <li ng-repeat="item in myPolls" ng-click="setPage('votePoll', item.poll_name)" class="list-group-item ng-binding ng-scope">{{ item.poll_name }}
+              <button ng-click="delete(item.poll_name); $event.stopPropagation()" class="btn">Delete</button>
+            </li>
+
+
+          </ul>
+
+
+        </form>
+      </div>
+      <div class="col-lg-4"></div>
+  </div>
+  </my-polls>
+  <my-results ng-show="page === 'results'">
+    <div id="resultsView">
+      <h1 class="ng-binding">results</h1>
+      <h3>{{ poll.poll_options }}</h3>
+      <h4> {{ results }}</h4>
+      <canvas id="myChart" height="400" width="400"></canvas>
+    </div>
+  </my-results>
+
+
+
+  <vote-poll ng-show="page === 'votePoll'" class="">
+    <div class="voting-form">
+      <div class="container">
+        <div class="col-lg-4 description">
+          <h1 class="ng-binding">{{ poll.poll_name }}</h1>
+          <p class="lead ng-binding">by Jason</p>
+        </div>
+        <div class="col-lg-4">
+          <form name="form" ng-submit="submit()" class="ng-pristine ng-valid">
+            <ul class="list-group">
+              <!-- ngRepeat: item in poll.poll_options -->
+              <li ng-repeat="item in poll.poll_options" class="list-group-item ng-binding ng-scope">
+                <input ng-model="form.choice" name="choice" type="radio" value="{{ item }}" class="ng-pristine ng-untouched ng-valid">{{ item }}</li>
+              <!-- end ngRepeat: item in poll.poll_options -->
+
+            </ul>
+            <button type="submit" ng-disabled="!isLoggedIn()" class="btn btn-lg btn-success">Vote!</button>
+          </form>
+        </div>
+        <div class="col-lg-4 comments">
+          <!-- ngRepeat: comment in poll.comments -->
+          <p ng-hide="commentsExist">Sorry, no comments yet.</p>
+        </div>
+      </div>
+    </div>
+  </vote-poll>
+<!--
+  <vote-poll ng-show="page === 'votePoll'">
+    <h3>votePoll</h3>
+    <div class="voting-form">
+      <div class="container">
+        <div class="col-lg-4 description">
+          <h1 class="ng-binding">?</h1>
+          <p class="lead ng-binding">by </p>
+        </div>
+        <h3>votePoll</h3>
+        <div class="col-lg-4">
+          <form class="ng-pristine ng-valid" ng-submit="submit()" name="form">
+            <ul class="list-group"></ul>
+            <button class="btn btn-lg btn-success" ng-disabled="!isLoggedIn()" type="submit">Vote!</button>
+          </form>
+        </div>
+        <div class="col-lg-4 comments">
+          <p ng-hide="commentsExist">Sorry, no comments yet.</p>
+        </div>
+      </div>
+    </div>
+  </vote-poll>
+  -->
+  
+</div>
+</div>
