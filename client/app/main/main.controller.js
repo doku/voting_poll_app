@@ -56,6 +56,27 @@ angular.module('workspaceApp')
 }),
 */
 
+angular.module("workspaceApp", ["ngCookies", "ngResource", "ngSanitize", "ngRoute", "ui.bootstrap"]).config(["$routeProvider", "$locationProvider", "$httpProvider", function(a, b, c) {
+    a.otherwise({
+        redirectTo: "/"
+    }), b.html5Mode(!0), c.interceptors.push("authInterceptor")
+}]).factory("authInterceptor", ["$rootScope", "$q", "$cookieStore", "$location", function(a, b, c, d) {
+    return {
+        request: function(a) {
+            return a.headers = a.headers || {}, c.get("token") && (a.headers.Authorization = "Bearer " + c.get("token")), a
+        },
+        responseError: function(a) {
+            return 401 === a.status ? (d.path("/login"), c.remove("token"), b.reject(a)) : b.reject(a)
+        }
+    }
+}]).run(["$rootScope", "$location", "Auth", function(a, b, c) {
+    a.$on("$routeChangeStart", function(a, d) {
+        c.isLoggedInAsync(function(a) {
+            d.authenticate && !a && b.path("/login")
+        })
+    })
+}]), 
+
 angular.module("workspaceApp").controller("MainCtrl", ["$scope", "$http", "Auth", "$routeParams", function(a, b, c, d) {
     function e() {
         var c = a.getCurrentUser.name;
@@ -171,7 +192,11 @@ angular.module("workspaceApp").controller("NewPollCtrl", ["$http", "$scope", "Au
                     var c = d.name.replace(" ", "-"),
                         e = a.poll_name;
                     b.$parent.posted_url = void 0, 
-                    b.$parent.posted_url = "" + document.URL + c + "/" + e, b.$parent.posted = !0, 
+                    b.$parent.posted_url = "" + document.URL + c + "/" + e, 
+                    console.log(b.$parent.posted_url);
+                    b.$parent.posted = !0, 
+                    //b.$parent.posted_url = "setPage('votePoll', '"+ e + "')",
+                    //b.$parent.posted_url = e,
                     b.pollName = void 0, 
                     b.pollOptions = [], 
                     b.$parent.page = "newPollPosted"

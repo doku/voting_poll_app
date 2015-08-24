@@ -60,8 +60,7 @@
           <p class="lead">What would you like to do today?</p>
           <button class="btn btn-primary btn-lg" ng-class="{ 'btn-success' : page === 'newPoll' }" ng-click="setPage('newPoll')">New Poll</button>
           <button class="btn btn-primary btn-lg" ng-class="{ 'btn-success' : page === 'myPolls' }" ng-click="setPage('myPolls')">My Polls</button>
-          <button class="btn btn-primary btn-lg" ng-class="{ 'btn-success' : page === 'results' }" ng-click="setPage('results')">results</button>
-          <button class="btn btn-primary btn-lg" ng-class="{ 'btn-success' : page === 'votePoll' }" ng-click="setPage('votePoll')">Vote Poll</button>
+         
         </div>
       </header>
     </logged-in>
@@ -72,12 +71,9 @@
 
 
     <new-poll ng-show="page === 'newPoll'">
-      <h3> poll form </h3>
-
 
       <div id="newPollForm" class="container ng-scope" ng-controller="NewPollCtrl">
 
-        <h2>New Poll</h2>
 
         <form class="ng-pristine ng-invalid ng-invalid-required" novalidate="" name="poll">
           <div class="form-group">
@@ -106,8 +102,9 @@
       <div id="newPollForm" class="container">
         <h1>Congratulations!</h1>
         <p class="lead">
-          Your poll has been posted to
-          <a class="ng-binding" href=""></a>
+          Your poll has been posted. It's located in My Polls.
+          <!-- <a href="{{ posted_url }}">{{ posted_url }}</a> -->
+          <!-- <button class="btn" ng-click="setPage('votePoll', '{{ posted_url }}')" type="submit">View Poll</button> -->
         </p>
       </div>
     </new-poll-posted>
@@ -115,7 +112,6 @@
       <div class="container">
         <div class="col-lg-4"></div>
 
-        <h3>myPolls</h3>
         <form class="ng-pristine ng-valid">
 
 
@@ -149,7 +145,7 @@
       <div class="container">
         <div class="col-lg-4 description">
           <h1 class="ng-binding">{{ poll.poll_name }}</h1>
-          <p class="lead ng-binding">by Jason</p>
+          <p class="lead ng-binding">by {{ getCurrentUser.name }}</p>
         </div>
         <div class="col-lg-4">
           <form name="form" ng-submit="submit()" class="ng-pristine ng-valid">
