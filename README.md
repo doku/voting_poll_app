@@ -10,6 +10,8 @@ In Cloud9.io workspace,
 Never run this command on your local machine. But in your Cloud 9 terminal window, run: 
 rm -rf * && echo "export NODE_PATH=$NODE_PATH:/home/ubuntu/.nvm/v0.10.35/lib/node_modules" >> ~/.bashrc && source ~/.bashrc && npm install -g yo grunt grunt-cli generator-angular-fullstack && yo angular-fullstack
 
+Do if npm and node is outdated: npm install -g npm node
+
 bower install && npm install
 
 To start MongoDB, run the following commands in your terminal: mkdir data && echo 'mongod --bind_ip=$IP --dbpath=data --nojournal --rest "$@"' > mongod && chmod a+x mongod && ./mongod
