@@ -56,7 +56,10 @@ angular.module('workspaceApp')
 }),
 */
 
-angular.module("workspaceApp", ["ngCookies", "ngResource", "ngSanitize", "ngRoute", "ui.bootstrap"]).config(["$routeProvider", "$locationProvider", "$httpProvider", function(a, b, c) {
+/*
+
+angular.module("workspaceApp", ["ngCookies", "ngResource", "ngSanitize", "ngRoute", "ui.bootstrap"])
+            .config(["$routeProvider", "$locationProvider", "$httpProvider", function(a, b, c) {
     a.otherwise({
         redirectTo: "/"
     }), b.html5Mode(!0), c.interceptors.push("authInterceptor")
@@ -76,6 +79,8 @@ angular.module("workspaceApp", ["ngCookies", "ngResource", "ngSanitize", "ngRout
         })
     })
 }]), 
+
+*/
 
 angular.module("workspaceApp").controller("MainCtrl", ["$scope", "$http", "Auth", "$routeParams", function(a, b, c, d) {
     function e() {
@@ -192,7 +197,7 @@ angular.module("workspaceApp").controller("NewPollCtrl", ["$http", "$scope", "Au
                     var c = d.name.replace(" ", "-"),
                         e = a.poll_name;
                     b.$parent.posted_url = void 0, 
-                    b.$parent.posted_url = "" + document.URL + c + "/" + e, 
+                    b.$parent.posted_url = "" + document.URL     + c + "/" + e, 
                     console.log(b.$parent.posted_url);
                     b.$parent.posted = !0, 
                     //b.$parent.posted_url = "setPage('votePoll', '"+ e + "')",
