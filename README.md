@@ -15,3 +15,6 @@ bower install && npm install
 To start MongoDB, run the following commands in your terminal: mkdir data && echo 'mongod --bind_ip=$IP --dbpath=data --nojournal --rest "$@"' > mongod && chmod a+x mongod && ./mongod
 
 grunt serve
+
+
+Files of interest: /server/apps.js /server/routes.js /server/api/polls/* /client/app/main/*
